@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>玉树临风美少年，揽镜自顾夜不眠 </title>
+  <script src="../js/react.development.js"></script>
+  <script src="../js/react-dom.development.js"></script>
+  <script src="../js/prop-types.js"></script>
+  <script src="../js/babel.min.js"></script>
+</head>
+<body>
+  <div id="app"></div>
+  <script type="text/babel">
+  // 定义组件
+  class Life extends React.Component{
+    state={
+      opacity:1
+    }
+    // 第一次render()初始显示界面之后
+    // 执行异步任务,发送ajax请求,启动定时器
+    componentDidMount() {
+      this.timeId=setInterval(() => {
+        console.log('测试')
+        let opacity=this.state.opacity
+        opacity-=0.1
+        // 准备更新之前
+        if(opacity<=0){
+          opacity=1
+        }
+        this.setState({
+          opacity
+        })
+      }, 200);
+    }
+    // 组件对象将要卸载死亡之前回调
+    componentWillUnmount () {
+      // 清理定时器
+      clearInterval(this.timeId)
+    };
+    
+    // 点击按钮的时候干掉定时器
+    unmountComp(){
+      // 干掉id为app的div
+      ReactDOM.unmountComponentAtNode(document.getElementById('app'))
+    }
+    render(){
+      const {opacity}=this.state
+      return(
+        <div>
+          
+        <p style={{opacity}}>React学不会,怎么办?</p>
+        <button onClick={this.unmountComp}>不活了</button>  
+        </div>
+      )
+    }
+  }
+
+  // 渲染组件
+  ReactDOM.render(<Life/>,document.getElementById('app'))
+  </script>
+</body>
+</html>

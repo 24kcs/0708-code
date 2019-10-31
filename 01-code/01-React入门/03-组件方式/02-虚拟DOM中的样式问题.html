@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>玉树临风美少年，揽镜自顾夜不眠 </title>
+  <script src="../js/react.development.js"></script>
+  <script src="../js/react-dom.development.js"></script>
+  <script src="../js/prop-types.js"></script>
+  <script src="../js/babel.min.js"></script>
+  <style type="text/css">
+    .cls{
+      color:red;
+      background-color: green;
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <div id="app2"></div>
+  <script type="text/babel">
+  // 渲染虚拟DOM的时候,class应该使用className
+
+    const cls = 'cls'
+  // 渲染虚拟DOM---关于类样式的问题
+  ReactDOM.render(<h1 className={cls}>哈哈</h1>,document.getElementById('app'))
+  
+  // 渲染虚拟DOM---关于style样式的问题
+  const myColor='red'
+  ReactDOM.render(<h2 style={{color:myColor}}>这是h2标签</h2>,document.getElementById('app2'))
+  </script>
+</body>
+</html>

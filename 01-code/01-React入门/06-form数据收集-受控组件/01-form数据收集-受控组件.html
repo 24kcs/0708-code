@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>玉树临风美少年，揽镜自顾夜不眠 </title>
+  <script src="../js/react.development.js"></script>
+  <script src="../js/react-dom.development.js"></script>
+  <script src="../js/prop-types.js"></script>
+  <script src="../js/babel.min.js"></script>
+</head>
+
+<body>
+  <!-- <form action="">
+    用户名:<input type="text" /><br />
+    密码:<input type="text" /> <br />
+    <button>登录</button>
+  </form> -->
+  <hr/>
+  <h1>非受控组件</h1>
+  <div id="app"></div>
+  <h1>受控组件</h1>
+  <div id="app2"></div>
+  <script type="text/babel">
+    // 定义组件
+    class FormComp extends React.Component{
+      // 创建两个容器
+      userNameRef=React.createRef()
+      userPwdRef=React.createRef()
+      // 登录
+      login=(event)=>{
+        // 阻止默认行为
+        event.preventDefault()
+        // 收集数据,发送ajax请求
+        const userName=this.userNameRef.current.value
+        const userPwd=this.userPwdRef.current.value
+        console.log(userName,userPwd)
+      }
+      render(){
+        return (
+          <form onSubmit={this.login}>
+          <label>用户名:</label>
+          <input type="text" ref={this.userNameRef} /><br/>
+          <label>密码:</label>
+          <input type="password" ref={this.userPwdRef} /><br/>
+          <input type="submit" value="登录" />
+          
+        </form>
+        )
+      }
+    }
+    // 渲染组件
+    ReactDOM.render(<FormComp/>,document.getElementById('app'))
+  </script>
+
+  <script type="text/babel">
+     // 定义组件
+     class FormComp2 extends React.Component{
+      state={
+        userName:'admin',
+        userPwd:'123'
+      }
+      
+      // 登录
+      login=(event)=>{
+        // 阻止默认行为
+        event.preventDefault()
+        // 从state中获取数据
+        const {userName,userPwd}=this.state
+        console.log(userName,userPwd)
+       
+      }
+      // 
+      handleChange=(event,name)=>{
+        const value=event.target.value
+        // 更新状态数据
+        this.setState({
+          [name]:value
+        })
+      }
+      render(){
+        const {userName,userPwd}=this.state
+        return (
+          <form onSubmit={this.login}>
+          <label>用户名:</label>
+          <input type="text" value={this.state.userName} onChange={(event)=>this.handleChange(event,'userName')} /><br/>
+          <label>密码:</label>
+          <input type="password" value={userPwd} onChange={(event)=>this.handleChange(event,'userPwd')}  /><br/>
+          <input type="submit" value="登录" />
+          
+        </form>
+        )
+      }
+    }
+    // 渲染组件
+    ReactDOM.render(<FormComp2/>,document.getElementById('app2'))
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>玉树临风美少年，揽镜自顾夜不眠 </title>
+  <script src="../js/react.development.js"></script>
+  <script src="../js/react-dom.development.js"></script>
+  <script src="../js/babel.min.js"></script>
+</head>
+<body>
+  <div id="root">哈哈</div>
+  <script type="text/babel">
+    /**
+     * react.development.js 是React核心库
+     * react-dom.development.js 是操作DOM的React库
+     * babel.min.js ES6转ES5  JSX转JS
+     * JSX:JavaScript XML
+     * HTML:用于展示信息
+     * <input type="text"/>
+     * XML:用户存储信息
+     */
+    // JS代码
+    // JSX的语法方式
+   	// ReactDOM.render(<h1>哈哈,我又变帅了</h1>,document.getElementById('root'))
+
+	const h1 = <h1>一表人才的健哥</h1>
+	// 渲染虚拟DOM到真实的DOM对象容器中
+  ReactDOM.render(h1,document.getElementById('root'))
+  </script>
+
+  <script type="text/babel">
+    // // JSX语法:
+    // // ReactDOM.render(<h1>Hello World</h1>,document.getElementById('root'))
+    // // 创建一个虚拟DOM
+    // const h1=<h1>Hello World2</h1>
+    // // 渲染虚拟DOM到页面中的指定的容器对象中
+    // ReactDOM.render(h1,document.getElementById('root'))
+    // // 问题: script标签中的type="text/javascript" 会报错:Uncaught SyntaxError: Unexpected token <
+    // // 解决: 修改script标签中的type="text/babel" 
+    // // 虚拟DOM对象中的属性很少-------------查看该对象是不是虚拟对象
+    // console.dir(h1)
+    // // 真实DOM对象中的属性很多------------查看该对象是不是真实DOM对象
+    // console.dir(document.getElementById('root'))
+
+  </script>
+</body>
+
+</html>

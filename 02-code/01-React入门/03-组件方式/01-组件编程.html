@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>玉树临风美少年，揽镜自顾夜不眠 </title>
+  <script src="../js/react.development.js"></script>
+  <script src="../js/react-dom.development.js"></script>
+  <script src="../js/babel.min.js"></script>
+</head>
+
+<body>
+  <div id="root1"></div>
+  <div id="root2"></div>
+  <!--课上代码-->
+  <script type="text/babel">
+    // 组件编程
+    // React中组件编程:创建组件的方式:2种
+    // 组件:具有特定功能效果的集合(html---css----js)
+    // 1. 工厂函数创建组件-------函数组件--------简单组件(无状态)
+    function MyComponent(){
+      return <h1>通过工厂函数的方式创建组件:这是h1标签</h1>
+    }
+    // 渲染组件
+    ReactDOM.render(<MyComponent/>,document.getElementById('root1'))
+    // ReactDOM.render(<MyComponent/>,document.getElementById('root2'))
+
+    // 2. ES6类组件----->类组件---------复杂组件(有状态)
+    class MyComponent2 extends React.Component{
+      // 回调函数---->当渲染组件的时候会自动的调用,不需要我们手动调用----重写该回调函数
+      render(){
+        return (
+          <h1>通过ES6类的方式创建组件</h1>
+        )
+      }
+    }
+    // 渲染组件
+    ReactDOM.render(<MyComponent2/>,document.getElementById('root2'))
+
+
+
+
+
+
+
+
+
+   
+    // 下面的代码是区分虚拟DOM和真实DOM的
+    // const h1=<h1>这是h1</h1>
+    // ReactDOM.render(h1,document.getElementById('root1'))
+    // 虚拟DOM对象
+    // console.dir(h1)
+    // 真实DOM对象
+    // console.dir(document.getElementById('root1'))
+    // 2. 通过ES6类的方式创建组件
+
+
+   
+  
+
+
+
+// 冗余代码
+//     function createPerson(){
+//       var obj= new Object()
+//       obj.name='小明'
+//       obj.age=20
+//       obj.sayHi=function(){
+//         console.log('啊捏哈谁有')
+//       }
+//     }
+// for(var i=0;i<100;i++){
+//   createPerson()
+// }
+
+  </script>
+  <!--备课代码-->
+  <script type="text/babel">
+    // 工厂函数组件(无状态/简单组件)每次调用都会返回一个新的对象
+    // function MyComponent1(props){
+    //   console.log('MyComponent1()',this)
+    //   return <h2>工厂模式创建DOM组件:{props.name}</h2>
+    // }
+    // // 将虚拟DOm进行渲染,内部调用组件函数
+    // ReactDOM.render(<MyComponent1 name="这么神奇吗"/>,document.getElementById('root1'))
+    // // ReactDOM.render(<MyComponent1></MyComponent1>,document.getElementById('root1'))
+
+    // // ES6类组件(有状态/复杂组件)
+    // class MyComponent2 extends React.Component{
+    
+    //   // 必须重写这个方法,是一个回调函数
+    //   render(){
+    //     console.log(this instanceof MyComponent2)
+    //     console.log(typeof MyComponent2)
+    //     return <h2>ES6创建类组件</h2>
+    //   }
+    // }
+    // // 渲染虚拟DOM
+    // ReactDOM.render(<MyComponent2/>,document.getElementById('root2'))
+  </script>
+
+
+</body>
+
+</html>

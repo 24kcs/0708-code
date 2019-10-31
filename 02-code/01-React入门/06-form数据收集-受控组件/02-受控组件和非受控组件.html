@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>玉树临风美少年，揽镜自顾夜不眠 </title>
+  <script src="../js/react.development.js"></script>
+  <script src="../js/react-dom.development.js"></script>
+  <script src="../js/prop-types.js"></script>
+  <script src="../js/babel.min.js"></script>
+</head>
+<body>
+  <div id="app"></div>
+  <hr/>
+  <div id="app2"></div>
+  <script type="text/babel">
+
+    // 定义组件
+    class FormComp extends React.Component{
+      userName = React.createRef()
+      userPwd = React.createRef()
+      // 提交的事件
+      submit=(event)=>{
+        // 阻止默认事件
+        event.preventDefault()
+        // 输出帐号和密码
+        const userName=this.userName.current.value
+        const userPwd=this.userPwd.current.value
+        console.log('帐号:'+userName+',密码:'+userPwd)
+      }
+      // 里面是虚拟DOM元素
+      render(){
+        return (
+          <div>
+            <h2>非受控组件</h2>
+            <form>
+              <label>帐号:</label>
+              <input type="text" ref={this.userName} />
+              <label>密码:</label>
+              <input type="password" ref={this.userPwd} />
+              <input onClick={this.submit} type="submit" value="提交" />
+            </form>  
+          </div>
+        )
+      }
+    }
+    // 渲染组件
+    ReactDOM.render(<FormComp/>,document.getElementById('app'))
+
+
+
+    // 第二个组件
+      // 定义组件
+      class FormComp2 extends React.Component{
+        // 状态数据
+        state={
+          userName:'admin',
+          userPwd:'123'
+        }
+        changeHandle=(event,flagName)=>{
+          // event.target.value----文本框的数据
+          // flagName--->具体是哪个文本框----->帐号/密码
+          // if(flagName==='userName' ----->flagName==='userPwd')
+          // 更新状态数据的操作
+          this.setState({
+            [flagName]:event.target.value
+          })
+          // flagName--->'userName'-----'userPwd'
+          // {
+          //   userName:
+          //   [flagName]:event.target.value
+          // }
+
+        }
+        submit2=(event)=>{
+          // 阻止默认行为
+          event.preventDefault()
+          // 输出帐号和密码
+          console.log(this.state.userName)
+          console.log(this.state.userPwd)
+        }
+        // 里面是虚拟DOM元素
+        render(){
+          return (
+            <div>
+              <h2>受控组件</h2>
+              <form>
+                <label>帐号:</label>
+                <input type="text" value={this.state.userName} onChange={(event)=>(this.changeHandle(event,'userName'))} />
+                <label>密码:</label>
+                <input type="password" value={this.state.userPwd} onChange={(event)=>(this.changeHandle(event,'userPwd'))}  />
+                <input onClick={this.submit2} type="submit" value="提交" />
+              </form>  
+            </div>
+          )
+        }
+    }
+    // 渲染组件
+    ReactDOM.render(<FormComp2/>,document.getElementById('app2'))
+    
+
+
+    // 原生的DOM中的onchange事件,需要手动的离开,才会触发该事件
+    // React中的onChange事件,只要输入内容改变,就会自动的触发
+
+
+    // obj={
+    //   "name":"小明"
+    // }
+    // obj.name
+    // var n='name'
+    // obj[n]='哈哈'
+    // obj={
+    //   [n]:'哈哈'
+    // }
+
+
+
+    // var obj={
+    //   "age":10
+    // }
+
+    // // 输出10
+    // console.log(obj.age)
+    // console.log(obj['age'])
+
+    // // 修改值
+    // obj.age=20
+    // console.log(obj.age)
+    // obj['age']=50
+  
+    // console.log(obj['age'])
+
+
+   
+    // var a='age'
+    // //console.log(obj['a'])//obj对象中有一个a的属性
+    // console.log(obj[a])
+    // console.log(obj.a) // 为obj添加一个a的属性,没有值,结果是undefined,js是一门动态类型的语言
+
+  </script>
+</body>
+</html>

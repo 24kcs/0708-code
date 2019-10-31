@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>玉树临风美少年，揽镜自顾夜不眠 </title>
+  <script src="../js/react.development.js"></script>
+  <script src="../js/react-dom.development.js"></script>
+  <script src="../js/prop-types.js"></script>
+  <script src="../js/babel.min.js"></script>
+</head>
+<body>
+  <div id="app"></div>
+  <script type="text/babel">
+    // 拆分组件-----静态组件
+    // 定义父级组件
+    class App extends React.Component{
+       // 状态数据
+       state={
+        todos:[
+          '温文尔雅的健哥',
+          '风流倜傥的华哥',
+          '一无所有的强哥',
+          '英俊潇洒的飞哥'
+        ]
+      }
+      // 添加数据的回调
+      addTodo=(todo)=>{
+        // 取出状态数据,添加数据
+        const {todos}=this.state
+        // 把数据插入到数组中所有数据的前面
+        todos.unshift(todo)
+        // 重新更新状态数据
+        this.setState({
+          todos
+        })
+      }
+      render(){
+        const {todos}=this.state
+        return (
+        <div>
+          {/* 这是注释:使用子级组件 */}
+          <p>这是一个父级组件</p>
+          <Add addTodo={this.addTodo} />
+          <List todos={todos} />
+        </div>
+        )
+      }
+    }
+    // 定义子级组件Add
+    class Add extends React.Component{
+      // 限定传入的数据的类型及是否是必须的
+      static propTypes={
+        addTodo:PropTypes.func.isRequired
+      }
+      // 点击事件的回调
+      add=()=>{
+        // 获取文本框的数据
+        const todo=this.refs.content.value.trim()
+        if(todo){
+          // 添加数据
+          this.props.addTodo(todo)
+          // 清空操作
+          this.refs.content.value=''
+          // 获取焦点
+          this.refs.content.focus()
+        }
+        
+      }
+      render(){
+      return (
+        <div>
+          <input type="text" ref="content" />&nbsp;
+          <button onClick={this.add}>添加 #3个数据</button>
+        </div>
+      )
+      }
+    }
+    // 定义子级组件List
+    class List extends React.Component{
+      // 限定传过来的数据的类型及是否是必须的
+      static propTypes={
+        todos:PropTypes.array.isRequired
+      }
+      render(){
+        const {todos}=this.props
+        return (
+          <div>
+          <ul>
+            {
+              todos.map((todo,index)=>(<li key={index}>{todo}</li>))
+            }
+          </ul>
+          </div>
+        )
+      }
+    }
+
+    // 渲染组件
+    ReactDOM.render(<App/>,document.getElementById('app'))
+
+
+ 
+  </script>
+</body>
+</html>

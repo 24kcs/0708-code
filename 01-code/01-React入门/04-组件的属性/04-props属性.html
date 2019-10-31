@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>玉树临风美少年，揽镜自顾夜不眠 </title>
+  <script src="../js/react.development.js"></script>
+  <script src="../js/react-dom.development.js"></script>
+  <script src="../js/prop-types.js"></script>
+  <script src="../js/babel.min.js"></script>
+
+</head>
+
+<body>
+  <div id="root1"></div>
+  <div id="root2"></div>
+  <div id="root3"></div>
+  <script type="text/babel">
+    // 通过组件的方式渲染列表:props属性
+
+    // 通过ES6类的方式创建组件
+    class MyComponent extends React.Component{
+      // 重写回调函数:------>自动调用的
+      render(){
+        console.log(this)
+        // 获取props数据
+        const {name,gender,age} = this.props
+        return (
+          <ul>
+            <li>姓名:{name}</li>
+            <li>性别:{gender}</li>
+            <li>年龄:{age}</li>
+          </ul>
+        )
+      }
+    }
+
+    // 限制传入的数据的类型
+    // MyComponent.propTypes = {
+    //   name:PropTypes.string.isRequired, // 表示的是:当前传入name属性的值是字符串
+    //   gender:PropTypes.string,
+    //   age:PropTypes.number
+    // }
+
+// 限制类型及是否是必须的
+    MyComponent.propTypes = {
+      name:PropTypes.string.isRequired, // 表示的是:当前传入name属性的值是字符串
+      gender:PropTypes.string,
+      age:PropTypes.number
+    }
+    // 限制属性的默认值
+    MyComponent.defaultProps={
+      // 性别是女,年龄是18
+      gender:'女',
+      age:18
+    }
+
+    // 名字是必须的
+    // 组件内传数据
+    const person={
+      name:'黑崎一护',
+      gender: '男',
+      age: 45
+    }
+    // 渲染组件
+    // ReactDOM.render(<MyComponent name={person.name} gender={person.gender} age={person.age} />,document.getElementById('root1'))
+
+    ReactDOM.render(<MyComponent name={person.name} />,document.getElementById('root1'))
+  </script>
+
+  <!--备课代码-->
+  <script type="text/babel">
+  //   // 通过ES6的方式定义类组件
+  //   class Person extends React.Component{
+  //     // 重写render回调函数
+  //     render(){
+  //       const {name,gender,age}=this.props
+  //       // 如果函数多个标签(有嵌套关系),那么使用()的方式进行包裹
+  //       return (
+  //         <ul>
+  //           <li>姓名:{name}</li>
+  //           <li>性别:{gender}</li>
+  //           <li>年龄:{age}</li>
+  //         </ul>
+  //       )
+  //     }
+  //   }
+  //   // 必须设置类组件的PropTypes
+  //   Person.propTypes={
+  //     name:PropTypes.string.isRequired,
+  //     gender:PropTypes.string.isRequired,
+  //     age:PropTypes.number.isRequired
+  //   }
+  //   // 设置默认值
+  //   Person.defaultProps={
+  //     gender:'女',
+  //     age:18
+  //   }
+  //   // 定义一个对象设置其属性的值
+  //   const person={
+  //     name:'tom',
+  //     gender:'男',
+  //     age:18
+  //   }
+  //   // 渲染组件,并传入数据
+  //   ReactDOM.render(<Person name={person.name} gender={person.gender} age={person.age} />,document.getElementById('root1'))
+  //   // 性别和年龄有默认值
+  //   ReactDOM.render(<Person name={person.name} />,document.getElementById('root2'))
+
+
+  // // 函数的方式创建组件
+    
+  // function Person2 (props){
+  //   return (
+  //     <ul>
+  //         <li>姓名:{props.name}</li>  
+  //         <li>性别:{props.gender}</li>  
+  //         <li>年龄:{props.age}</li>  
+  //     </ul>
+  //   )
+  // }
+  //   // 设置PropTypes
+  //   Person2.propTypes={
+  //     name: PropTypes.string.isRequired,
+  //     gender:PropTypes.string,
+  //     age:PropTypes.number
+  //   }
+  //   // 设置默认props
+  //   Person2.defaultProps={
+  //     gender:'女',
+  //     age:15
+  //   }
+  // ReactDOM.render(<Person2 name={person.name}/>,document.getElementById('root3'))
+  </script>
+</body>
+
+</html>

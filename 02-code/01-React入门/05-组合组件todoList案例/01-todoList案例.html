@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>玉树临风美少年，揽镜自顾夜不眠 </title>
+  <script src="../js/react.development.js"></script>
+  <script src="../js/react-dom.development.js"></script>
+  <script src="../js/prop-types.js"></script>
+  <script src="../js/babel.min.js"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    // 组合组件使用
+    // 定义父级组件
+    class App extends React.Component{
+      // 初始化状态数据
+      state={
+        todos:['温文尔雅的健哥','清新俊逸的华哥','才貌双全的飞哥']
+      }
+      // 添加数据操作的回调
+      addTodo = (todo) => {
+        // 获取状态数据中的todos
+        const todos = this.state.todos
+        // 下面的操作是直接修改状态数据中的todos---不太建议这么做
+        // todos.unshift(todo)
+        // this.setState({
+        //   todos:
+        // })
+        // 推荐这种方式,不是直接修改状态数据,而是指定新的值
+        this.setState({
+          todos:[todo,...todos]
+        })
+      }
+      // 重写render
+      render(){
+        const {todos}=this.state
+        return (
+          <div>
+            父级组件引入两个子级组件  
+            <Add addTodo={this.addTodo} length={todos.length}/>
+            <List todos={todos} />
+          </div>
+        )
+      }
+    }
+    // 定义子级组件---添加数据
+    class Add extends React.Component{
+      // 设置属性类型及必须性
+      static propTypes={
+        addTodo:PropTypes.func.isRequired,
+        length:PropTypes.number.isRequired
+      }
+      // 添加操作
+      add=()=>{
+        // 通过refs获取文本框的数据,并去空格
+        const todo=this.refs.content.value.trim()
+        // 存在再调用传过来的方法进行数据的添加
+        if(todo){
+          this.props.addTodo(todo)
+        }
+        // 清空文本框
+        this.refs.content.value=''
+        this.refs.content.focus() // 重新获取焦点
+       
+      }
+      // 重写render
+      render(){
+        const length=this.props.length
+        return(
+          <div>
+            <input type="text" ref="content" />&nbsp;
+            <button onClick={this.add}>添加 #{length}个</button>
+          </div>
+        )
+      }
+    }
+    // 定义子级组件---列表展示
+    class List extends React.Component{
+      static propTypes={
+        todos:PropTypes.array.isRequired
+      }
+      // 重写render
+      render(){
+        const {todos}=this.props
+        return (
+          <div>
+            <ul>
+              {
+                todos.map((todo,index)=>(
+                  <li key={index}>{todo}</li>
+                ))
+              }  
+            </ul>
+          </div>
+        )
+      }
+    }
+    // 渲染组件
+    ReactDOM.render(<App/>,document.getElementById('root'))
+  </script>
+</body>
+
+</html>

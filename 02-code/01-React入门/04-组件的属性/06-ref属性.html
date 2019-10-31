@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>玉树临风美少年，揽镜自顾夜不眠 </title>
+  <script src="../js/react.development.js"></script>
+  <script src="../js/react-dom.development.js"></script>
+  <script src="../js/prop-types.js"></script>
+  <script src="../js/babel.min.js"></script>
+</head>
+
+<body>
+  <div id="root1"></div>
+  <div id="root2"></div>
+  <div id="root3"></div>
+
+  
+
+  <script type="text/babel">
+
+
+  // 需求2:点击按钮显示文本框的数据,使用refs新的语法方式
+  // 创建组件
+  class MyComponent2 extends React.Component{
+    
+    constructor(props){
+      super(props)
+      // 创建ref容器
+      this.myRef=React.createRef()
+    }
+    // 点击事件的回调
+    showMessage=()=>{
+      console.log(this)
+      // 通过ref容器的current属性获取当前的文本框对象
+      console.log(this.myRef.current.value)
+    }
+    // 重写render
+    render(){
+      return(
+        <div>
+          <input type="text" ref={this.myRef} />&nbsp;
+          <button onClick={this.showMessage}>显示文本框中的数据</button>
+        </div>
+      )
+    }
+  }
+  // 渲染组件
+  ReactDOM.render(<MyComponent2/>,document.getElementById('root2'))
+
+
+  // 需求3:文本框失去焦点后,显示里面的数据
+  class MyComponent3 extends React.Component{
+    constructor(props){
+      super(props)
+    }
+    // 失去焦点的回调函数
+    blurHandle=(event)=>{
+      console.log(event.target.value)
+    }
+    // 失去焦点的回调函数,再传入其他的参数:只需要再包裹一层函数即可
+    // 重写render 回调
+    blurHandle2=(event,text)=>{
+      console.log(event.target.value+'============='+text)
+    }
+    render(){
+      return (
+        <div>
+          <input type="text" onBlur={this.blurHandle} /><br/>
+          <input type="text" onBlur={(event)=>(this.blurHandle2(event,'真神奇啊'))} />
+        </div>
+      )
+    }
+  }
+  // 渲染组件
+  ReactDOM.render(<MyComponent3/>,document.getElementById('root3'))
+  </script>
+</body>
+
+</html>

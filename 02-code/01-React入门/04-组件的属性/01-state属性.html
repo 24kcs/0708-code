@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>玉树临风美少年，揽镜自顾夜不眠 </title>
+  <script src="../js/react.development.js"></script>
+  <script src="../js/react-dom.development.js"></script>
+  <script src="../js/babel.min.js"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <!--组件对象中有state-->
+  <script type="text/babel">
+  // class Like extends React.Component{
+  //   render(){
+  //     console.log(this)
+  //     return (
+  //       <p>这是P</p>
+  //     )
+  //   }
+  // }
+  // ReactDOM.render(<Like/>,document.getElementById('root'))
+  </script>
+  <!--简化版-->
+  <script type="text/babel">
+    // 通过ES6类的方式创建组件
+    class Like extends React.Component{
+      // 存储数据状态
+        state = {
+          isLike:true,
+        }
+       // 悲剧的发生=========================
+       // 点击事件的回调函数
+      clickHandle= () =>{
+        // 此时this不是当前组件的实例对象,所以,我要改变this的指向
+        //console.log(this)
+         const isLike = !this.state.isLike
+         // 修改状态数据的方法
+         this.setState({
+           isLike
+         })
+         //this.state.isLike=isLike
+      }
+      // 重写回调函数
+      render(){
+        return (
+          <h1 onClick={this.clickHandle}>{this.state.isLike?'我喜欢你':'你喜欢我'}</h1>
+        )
+      }
+    }
+    // 渲染组件
+    ReactDOM.render(<Like/>,document.getElementById('root'))
+
+  </script>
+  <!--课上代码-->
+  <script type="text/babel">
+    // // 通过ES6类的方式创建组件
+    // class Like extends React.Component{
+    //   // 构造器
+    //   constructor(props){
+    //     super(props)
+    //     // 设计一个数据,该数据的状态发生改变,影响到标签中间内容
+    //     this.state = {
+    //       isLike:true,
+    //     }
+    //     // 改变this的指向
+    //     this.clickHandle = this.clickHandle.bind(this)
+    //   }
+    //    // 悲剧的发生=========================
+    //    // 点击事件的回调函数
+    //   clickHandle(){
+    //     // 此时this不是当前组件的实例对象,所以,我要改变this的指向
+    //     //console.log(this)
+    //      const isLike=!this.state.isLike
+    //      // 修改状态数据的方法
+    //      this.setState({
+    //       isLike
+    //      })
+    //      //this.state.isLike=isLike
+    //   }
+    //   // 重写回调函数
+    //   render(){
+    //     return (
+    //       <h1 onClick={this.clickHandle}>{this.state.isLike?'我喜欢你':'你喜欢我'}</h1>
+    //     )
+    //   }
+    // }
+
+  
+   
+    // // 渲染组件
+    // ReactDOM.render(<Like/>,document.getElementById('root'))
+
+
+  
+  </script>
+  <!--备课代码-->
+  <script type="text/babel">
+
+    // // 创建类组件
+    // class Like extends React.Component{
+    //   // 初始化状态值
+    //   constructor(props){
+    //     // 父类型的构造函数
+    //     super(props)
+    //     // 初始状态值
+    //     this.state = {
+    //       isLike:false
+    //     }
+    //     // clickHandle中的this是window,而不是当前的实例对象
+    //     this.clickHandle=this.clickHandle.bind(this)
+    //   }
+    //   // 点击事件的回调函数
+    //   clickHandle(){
+    //     console.log(this)
+    //     const isLike=!this.state.isLike
+    //     this.setState({
+    //       isLike
+    //     })
+    //   }
+    //   // 重写render 方法,在渲染组件的时候自动调用该回调
+    //   render(){
+    //     const {isLike}=this.state
+    //     return <h2 onClick={this.clickHandle}>{isLike?'我喜欢你':'你喜欢我'}</h2>
+    //   }
+    // }
+    // // 渲染虚拟DOM
+    // ReactDOM.render(<Like/>,document.getElementById('root'))
+  </script>
+</body>
+
+</html>

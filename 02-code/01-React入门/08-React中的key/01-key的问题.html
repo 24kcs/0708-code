@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>玉树临风美少年，揽镜自顾夜不眠 </title>
+  <script src="../js/react.development.js"></script>
+  <script src="../js/react-dom.development.js"></script>
+  <script src="../js/prop-types.js"></script>
+  <script src="../js/babel.min.js"></script>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script type="text/babel">
+    // 定义组件
+    class PersonList extends React.Component{
+      state={
+        id:3,
+        persons:[
+          {id:1,name:'tom',age:13},
+          {id:2,name:'jack',age:18}
+        ]
+      }
+     
+      // 增加
+      add=()=>{
+        let id=this.state.id
+        const persons=this.state.persons
+        this.setState({
+          persons:[{id:++id,name:'Bob',age:12},...persons],
+          id
+        })
+      }
+      // 删除
+      remove=()=>{
+        const persons=this.state.persons
+        persons.splice(persons.length-1,1)
+        this.setState({
+          persons:[...persons]
+        })
+      }
+      // 排序
+      sort=()=>{
+        const {persons}=this.state
+        persons.sort((p1,p2)=>{return p2.age-p1.age})
+        this.setState({
+          persons:[...persons]
+        })
+      }
+      render(){
+        const {persons}=this.state
+        return (
+          <div>
+          <div>
+            <button onClick={this.add}>添加</button>&nbsp;
+            <button onClick={this.remove}>删除</button>&nbsp;
+            <button onClick={this.sort}>排序</button>&nbsp;  
+          </div>
+          <h2>使用id作为key</h2>
+          <ul>
+            {
+              persons.map((per,index)=>
+                <li key={per.id}>{per.id}----{per.name}----{per.age}---<input type="text"/></li>
+                
+              )
+            }
+          </ul>
+          <h2>使用index作为key</h2>
+         
+          <ul>
+            {
+              persons.map((per,index)=>
+                <li key={index}>{per.id}----{per.name}----{per.age}--- <input type="text"/></li>
+               
+              )
+            }
+          </ul>
+        </div>
+        )
+      }
+    }
+    // 渲染组件
+    ReactDOM.render(<PersonList/>,document.getElementById('app'))
+  </script>
+</body>
+
+</html>
