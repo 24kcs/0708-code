@@ -1,50 +1,56 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types'
-// 引入action对象
-// import {increment,decrement} from './redux/action-creators.js'
-// * 所有的东西, 把所有的东西都塞进action对象中
- import * as action from './redux/action-creators.js'
-class App extends Component {
-  // 设置传入数据的类型及是否是必须的
-  static propTypes={
-    store:PropTypes.object.isRequired
-  }
 
+class App extends Component {
+  // 状态数据---更改状态数据---
+  state = {
+    number: 0
+  }
+  // getNumber=(event)=>{
+  //   console.log(event.target.value)
+  // }
+  // 加的操作
   increment = () => {
+    const { number } = this.state
     // 获取数字
     const value = this.refs.content.value * 1
-    // this.props.store.dispatch(increment(value))
-    this.props.store.dispatch(action.increment(value))
-    
+    this.setState({
+      number: number + value
+    })
   }
   // 减的操作
   decrement = () => {
+    const { number } = this.state
     // 获取数字
     const value = this.refs.content.value * 1
-    this.props.store.dispatch(action.decrement(value))
+    this.setState({
+      number: number - value
+    })
   }
   // 奇数的时候加
   incrementIfOdd = () => {
+    const { number } = this.state
     // 获取数字
     const value = this.refs.content.value * 1
     // 判断
-    // 判断状态数据是不是奇数
-    if(this.props.store.getState()%2!==0){
-      this.props.store.dispatch(action.increment(value))
+    if (number % 2 !== 0) {
+      this.setState({
+        number: number + value
+      })
     }
-  
   }
   // 异步的加
   incrementAsync=()=>{
-   
+    const { number } = this.state
     // 获取数字
     const value = this.refs.content.value * 1
     setTimeout(() => {
-      this.props.store.dispatch(action.increment(value))
+      this.setState({
+        number: number + value
+      })
     }, 1000);
   }
   render() {
-    const number=this.props.store.getState()
+    const { number } = this.state
     return (
       <div>
         <h2>点击了{number}次</h2>

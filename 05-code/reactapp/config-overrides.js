@@ -1,4 +1,4 @@
-const { override, fixBabelImports, addLessLoader } = require('customize-cra');
+const { override, fixBabelImports, addLessLoader ,addDecoratorsLegacy} = require('customize-cra');
 module.exports = override(
   // 对babel进行配置
   fixBabelImports('import', {
@@ -11,4 +11,6 @@ module.exports = override(
     javascriptEnabled: true,
     modifyVars: { '@primary-color': '#52c41a' },
   }),
+  // 设置babel,支持es7语法,简化高阶组件语法
+  addDecoratorsLegacy()
 );

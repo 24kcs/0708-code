@@ -1,21 +1,18 @@
 import React, { Component } from 'react';
+// 引入PropTypes
 import PropTypes from 'prop-types'
-// 引入action对象
-// import {increment,decrement} from './redux/action-creators.js'
-// * 所有的东西, 把所有的东西都塞进action对象中
- import * as action from './redux/action-creators.js'
+// 引入action
+import * as action from './redux/action-creators.js'
 class App extends Component {
-  // 设置传入数据的类型及是否是必须的
   static propTypes={
     store:PropTypes.object.isRequired
   }
 
+  // 加的操作
   increment = () => {
     // 获取数字
     const value = this.refs.content.value * 1
-    // this.props.store.dispatch(increment(value))
     this.props.store.dispatch(action.increment(value))
-    
   }
   // 减的操作
   decrement = () => {
@@ -25,18 +22,18 @@ class App extends Component {
   }
   // 奇数的时候加
   incrementIfOdd = () => {
+  
     // 获取数字
     const value = this.refs.content.value * 1
+    const {number}=this.props.store.getState()
     // 判断
-    // 判断状态数据是不是奇数
-    if(this.props.store.getState()%2!==0){
+    if(number%2!==0){
       this.props.store.dispatch(action.increment(value))
     }
-  
   }
   // 异步的加
   incrementAsync=()=>{
-   
+  
     // 获取数字
     const value = this.refs.content.value * 1
     setTimeout(() => {
@@ -44,7 +41,7 @@ class App extends Component {
     }, 1000);
   }
   render() {
-    const number=this.props.store.getState()
+    const {number}=this.props.store.getState()
     return (
       <div>
         <h2>点击了{number}次</h2>
