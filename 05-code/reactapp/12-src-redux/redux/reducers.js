@@ -6,8 +6,6 @@
 // 判断action.type,根据不同的type,对数据(action.data)做不同的操作
 
 // 引入type
-// 引入redux
-import {combineReducers} from 'redux'
 import { INCREMENT, DECREMENT } from './action-types.js'
 // 最终这个函数也要暴露出去
 function number(prevState = 0, action) {
@@ -22,22 +20,7 @@ function number(prevState = 0, action) {
       return prevState
   }
 }
-
-function arr(prevState=[],action){
-  switch (action.type) {
-    case 'UPDATEARR':
-      return [action.data,...prevState]
-    default:
-      return prevState
-  }
-}
-
-// 两个一起暴露出去,以函数的方式进行暴露,内部是对象
-export default combineReducers({
-  number,
-  arr
-})
-
+export default number
 
 // 代码的流程控制
 // 顺序,分支,循环
