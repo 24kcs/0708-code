@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 // 引入WithHoc
 import WithHoc from './withHoc/WithHoc.jsx'
 class Register extends Component {
-  // static displayName='Register'
    // 提交的操作
    submit = (event) => {
     // 阻止默认行为

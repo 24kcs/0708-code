@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
 // 引入WithHoc组件
 import WithHoc from './withHoc/WithHoc.jsx'
-
-// es7的语法-----通过babel进行配置---es7转es5
-// 装饰器:高阶组件的使用的一种简化方式
-@WithHoc(1,2)
 class Login extends Component {
-  // 重写的名字
-  static displayName='Login'
+
   // 提交的操作
   submit = (event) => {
     // 阻止默认行为
@@ -29,8 +24,7 @@ class Login extends Component {
     );
   }
 }
-export default Login
-// export default WithHoc(1,2)(Login)
+export default WithHoc(1,2)(Login)
 
 // 名字()()
 // export default Login;

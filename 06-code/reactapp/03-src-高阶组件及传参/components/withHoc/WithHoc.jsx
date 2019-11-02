@@ -4,7 +4,6 @@ function WithHoc(a,b) {
   return (WrappedComponent) => {
     // 内部会返回一个新的组件
     return class extends Component {  // 父级组件----state,回调
-      static displayName=`form(${WrappedComponent.displayName||WrappedComponent.name||'Component'})`
       state = {
         username: '',  // 帐号
         userpwd: ''  // 密码

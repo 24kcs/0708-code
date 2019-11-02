@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import WithHoc from './withHoc/WithHoc.jsx'
 
 // es7的语法-----通过babel进行配置---es7转es5
-// 装饰器:高阶组件的使用的一种简化方式
 @WithHoc(1,2)
 class Login extends Component {
   // 重写的名字
