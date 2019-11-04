@@ -7,14 +7,16 @@ import axios from 'axios'
 import logo from './images/logo.png'
 import { Form, Icon, Input, Button, message } from 'antd';
 // 引入connect
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 // 引入action
-import {saveUser} from '../../redux/action-creators.js'
+import { saveUser } from '../../redux/action-creators.js'
+// 引入接口文件
+import { reqLogin } from '../../api'
 
 const Item = Form.Item
 
 // 装饰器的使用
-@connect(null,{
+@connect(null, {
   saveUser
 })
 @Form.create()
@@ -23,47 +25,61 @@ class Login extends Component {
     // 阻止事件的默认行为
     e.preventDefault();
     // 表单的验证是否都通过了!
-    this.props.form.validateFields((error, values) => {
+    this.props.form.validateFields(async (error, values) => {
       // console.log(values)  values是一个对象---可以直接获取表单中的数据
       // 错误
       if (!error) {
         //message.success('表单验证成功')
         // 获取帐号和密码
         const { username, password } = values
-        
-        // 发送异步
-        axios.post(`http://localhost:3000/api/login`,{username,password})
-        .then(({data})=>{
-          // 判断发送的请求是否是成功的
-          if(data.status===0){
-            // 请求成功了,提示信息:登录成功
-            message.success('登录成功')
-            // console.log(data)
-            // 保存用户信息
-            this.props.saveUser(data.data)
-            // 跳转界面
-         
+        const result = await reqLogin(username, password)
+        // 判断是否登录成功
+        if (result.status === 0) {
+          // 成功啦
+          message.success('登录成功')
+          this.props.saveUser(result.data)
+          // 跳转到首页
+          this.props.history.replace('/')
+        } else {
+          message.error(result.msg)
+        }
 
-          }else{
-            // 请求失败了
-            message.error(data.msg)
-          }
-        })
-        .catch((error)=>{
-          message.error('请求失败:'+error)
-        })
+        // 发送异步
+        // axios.post(`http://localhost:3000/api/login`,{username,password})
+        // .then(({data})=>{
+        //   // 判断发送的请求是否是成功的
+        //   if(data.status===0){
+        //     // 请求成功了,提示信息:登录成功
+        //     message.success('登录成功')
+        //     // console.log(data)
+        //     // 保存用户信息
+        //     this.props.saveUser(data.data)
+        //     // 跳转界面
+
+
+        //   }else{
+        //     // 验证失败了
+        //     message.error(data.msg)
+        //     this.props.form.resetFields(['password'])
+
+        //   }
+        // })
+        // .catch((error)=>{
+        //   message.error('请求失败:'+error)
+        // })
 
 
         // 发送异步请求,获取用户信息,保存
-      } else {
-        message.error('表单验证失败')
       }
+      // else {
+      //   message.error('表单验证失败')
+      // }
     })
 
   };
   // 做表单的验证
   validator = (rule, value, callback) => {
-   // console.log(rule)
+    // console.log(rule)
     // 密码验证:规则和用户名验证规则是一样的(必须有内容,大于3位,小于12位,有数字/字母/下划线)
     if (!value) {
       // 用来做提示的
@@ -113,6 +129,7 @@ class Login extends Component {
             <Item>
               {
                 getFieldDecorator('password', {
+                  // initialValue:'admin', // 初始化密码的
                   rules: [
                     { validator: this.validator }
                   ]
