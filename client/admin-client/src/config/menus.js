@@ -12,7 +12,7 @@ const menus=[
       {
         icon:'bars',
         title:'分类管理',
-        key:'/ctegory'
+        key:'/category'
       },
       {
         icon:'tool',

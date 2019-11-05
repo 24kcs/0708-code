@@ -48,10 +48,27 @@ class LeftNav extends Component {
         return this.createCmenus(menu)
       }
     }
-
     )
   }
 
+  // 根据当前路径,获取这个二级菜单所在的一级菜单的key 
+  getOpenKey = (pathname) => {
+    for (let i = 0; i < menus.length; i++) {
+      const menu = menus[i]
+      // 判断当前的这个菜单有没有children
+      if (menu.children) {
+        // 此时说明这个menu就是一个一级菜单,但是这个一级菜单有二级的菜单
+        for (let j = 0; j < menu.children.length; j++) {
+          // cMenu是当前这个一级菜单中所有的二级菜单对象{key:'路径',icon,title}
+          const cMenu = menu.children[j]
+          if(cMenu.key===pathname){
+              // 获取该二级菜单的一级菜单的key
+              return menu.key
+          }
+        }
+      }
+    }
+  }
 
   render() {
     // 调用方法显示菜单
@@ -60,8 +77,15 @@ class LeftNav extends Component {
     const { pathname } = this.props.location
     // defaultSelectedKeys 设置默认的菜单被选中(key的属性值,遍历生成菜单的时候,key属性值都是读取出来,路径)
 
+
+    // 如果一个二级菜单被选中了,那么此时这个二级菜单对应的这个一级菜单就要被展开,defaultOpenKeys=一级菜单的路径
+    // 每个标签中的key中存储的都是路径
+    // 选中的是二级菜单,地址栏中的路径应该和当前你选中的这个二级菜单的路径如果一致,得到的是这个二级带单对应的一级菜单的key
+    //defaultOpenKeys=一级菜单的key---一级菜单就会被展开
+    const openKey = this.getOpenKey(pathname)
+
     return (
-      <Menu theme="dark" defaultSelectedKeys={[pathname]} mode="inline">
+      <Menu theme="dark" defaultSelectedKeys={[pathname]} defaultOpenKeys={[openKey]} mode="inline">
         {
           menus
         }
