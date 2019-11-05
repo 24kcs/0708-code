@@ -205,3 +205,13 @@
             })
 
 */
+
+
+
+// connect(redux中的状态数据,redux中action对象)(组件)
+// redux中的状态数据,通过(state)=>({reducers的函数名字:state.属性名字})
+// redux中action对象,{action-creators中的方法}
+// action-creators中的方法:的返回值就是action对象
+// redux中的状态数据及action的方法直接给了后面传入的组件的props属性了
+// 组件中的props中必然可以直接使用状态数据及action的方法(可以进行提交,修改数据)
+// @connect(redux中的状态数据,redux中action对象)---装饰器的用法
