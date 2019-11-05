@@ -4,11 +4,6 @@ import Admin from '../components/Admin/Admin.jsx'
 export default[
   {
     exact:true,
-    path:'/login',
-    component:Login
-  },
-  {
-    exact:true,
     path:'/',
     component:Admin
   }

@@ -3,26 +3,29 @@ import React, { Component } from 'react';
 import routes from './config/routes.js'
 // 引入路由
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
+// 引入NotMatch组件
+import NotMatch from './components/not-match/NotMatch.jsx'
+// 引入最外面的大的组件
+import BasicLayout from './components/basic-layout/BasicLayout.jsx'
+// 引入Login
+import Login from './containers/Login/Login.jsx'
 class App extends Component {
   render() {
     return (
       <Router>
-        {
-          // routes.map((route,index)=>(
-          //   <Route key={index} path={route.path} component={route.component} exact={route.exact} />
-          // ))
-
-          routes.map((route,index)=>(<Route key={index} {...route} />))
-        }
-
-
-        {/* <Switch>
+        <Switch>
           <Route path="/login" component={Login} />
-          <Route path="/" component={Admin} />
-        </Switch> */}
+          <BasicLayout>
+            <Switch>
+              {
+                routes.map((route, index) => (<Route key={index} {...route} />))
+              }
+              {/* 如果没有path,那么只要地址不是/和不是/login,就匹配我下面的 */}
+              <Route component={NotMatch} />
+            </Switch>
+          </BasicLayout>
+        </Switch>
 
-        {/* <Route exact path="/login" component={Login} />
-        <Route exact path="/" component={Admin} /> */}
 
 
       </Router>
