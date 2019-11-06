@@ -3,8 +3,12 @@ import { Menu, Icon } from 'antd';
 // 引入菜单数据
 import menus from '../../../config/menus.js'
 import { withRouter, Link } from 'react-router-dom'
+// 引入国际化的包
+// 引入实现国际化的翻译的相关的包,高阶组件
+import { withTranslation} from 'react-i18next';
 const { SubMenu } = Menu;
 
+@withTranslation()
 @withRouter
 class LeftNav extends Component {
   // 创建一级菜单的
@@ -13,7 +17,7 @@ class LeftNav extends Component {
       <Menu.Item key={menu.key}>
         <Link to={menu.key}>
           <Icon type={menu.icon} />
-          <span>{menu.title}</span>
+          <span>{this.props.t(menu.title)}</span>
         </Link>
       </Menu.Item>
     )
@@ -30,7 +34,7 @@ class LeftNav extends Component {
             title={
               <span>
                 <Icon type={menu.icon} />
-                <span>{menu.title}</span>
+                <span>{this.props.t(menu.title)}</span>
               </span>
             }
           >

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 // 引入routes
 import routes from './config/routes.js'
 // 引入路由
@@ -9,26 +9,29 @@ import NotMatch from './components/not-match/NotMatch.jsx'
 import BasicLayout from './components/basic-layout/BasicLayout.jsx'
 // 引入Login
 import Login from './containers/Login/Login.jsx'
+// 引入旋转的组件
+import { Spin } from 'antd';
+
 class App extends Component {
   render() {
     return (
-      <Router>
-        <Switch>
-          <Route path="/login" component={Login} />
-          <BasicLayout>
-            <Switch>
-              {
-                routes.map((route, index) => (<Route key={index} {...route} />))
-              }
-              {/* 如果没有path,那么只要地址不是/和不是/login,就匹配我下面的 */}
-              <Route component={NotMatch} />
-            </Switch>
-          </BasicLayout>
-        </Switch>
+      <Suspense fallback={ <Spin size="large" />}>
+        <Router>
+          <Switch>
+            <Route path="/login" component={Login} />
+            <BasicLayout>
+              <Switch>
+                {
+                  routes.map((route, index) => (<Route key={index} {...route} />))
+                }
+                {/* 如果没有path,那么只要地址不是/和不是/login,就匹配我下面的 */}
+                <Route component={NotMatch} />
+              </Switch>
+            </BasicLayout>
+          </Switch>
+        </Router>
+      </Suspense>
 
-
-
-      </Router>
     );
   }
 }
