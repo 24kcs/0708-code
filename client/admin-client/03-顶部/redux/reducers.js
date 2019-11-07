@@ -1,7 +1,7 @@
 // 包含了多个的reducer,更新/修改状态数据的函数
 
 // 引入action的type
-import {SAVE_USER,REMOVE_USER,SET_TITLE} from './action-types.js'
+import {SAVE_USER,REMOVE_USER,UPDATE_TITLE} from './action-types.js'
 // 引入redux
 import {combineReducers} from 'redux'
 // 引入storage.js文件
@@ -22,8 +22,11 @@ function user(prevState=initUser,action){
       //prevState.token=action.data.token
       return action.data
     case REMOVE_USER:
+      // 删除用户信息
       removeItem('user')
+      // 删除token信息
       removeItem('token')
+      // 返回最新的数据
       return {
         user:{},
         token:''
@@ -34,13 +37,12 @@ function user(prevState=initUser,action){
 }
 function title(prevState='',action){
   switch (action.type) {
-    case SET_TITLE:
+    case UPDATE_TITLE:
       return action.data
     default:
       return prevState
   }
 }
-
 export default combineReducers({
   user,
   title

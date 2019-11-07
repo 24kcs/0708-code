@@ -9,6 +9,7 @@ import NotMatch from './components/not-match/NotMatch.jsx'
 import BasicLayout from './components/basic-layout/BasicLayout.jsx'
 // 引入Login
 import Login from './containers/Login/Login.jsx'
+// 引入旋转的组件
 import { Spin } from 'antd';
 
 class App extends Component {
@@ -31,7 +32,7 @@ class App extends Component {
         </Router>
       </Suspense>
 
-    )
+    );
   }
 }
 

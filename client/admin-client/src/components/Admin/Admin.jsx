@@ -5,8 +5,8 @@ import './Admin.less'
 class Admin extends Component {
   render() {
     return (
-      <div>
-        首页
+      <div className="admin_content">
+       欢迎使用硅谷后台管理系统~~
       </div>
     );
   }

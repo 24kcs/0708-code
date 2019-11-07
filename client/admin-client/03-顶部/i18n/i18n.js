@@ -6,14 +6,11 @@ import { initReactI18next } from 'react-i18next';
 i18n
   // load translation using xhr -> see /public/locales
   // learn more: https://github.com/i18next/i18next-xhr-backend
-  // 使用ajax加载translation翻译包
   .use(Backend)
   // detect user language
   // learn more: https://github.com/i18next/i18next-browser-languageDetector
-  // 选择用户的默认语言
   .use(LanguageDetector)
   // pass the i18n instance to react-i18next.
-  // 可以在react中使用
   .use(initReactI18next)
   // init i18next
   // for all options read: https://www.i18next.com/overview/configuration-options

@@ -3,12 +3,15 @@ import { Menu, Icon } from 'antd';
 // 引入菜单数据
 import menus from '../../../config/menus.js'
 import { withRouter, Link } from 'react-router-dom'
-import { withTranslation } from 'react-i18next'
-// 引入connect及setTitle
+// 引入国际化的包
+// 引入实现国际化的翻译的相关的包,高阶组件
+import { withTranslation } from 'react-i18next';
+// 引入connect
 import { connect } from 'react-redux'
-import { setTitle } from '../../../redux/action-creators.js'
+import { updateTitle } from '../../../redux/action-creators.js'
 const { SubMenu } = Menu;
-@connect(null, { setTitle })
+
+@connect(null, { updateTitle })
 @withTranslation()
 @withRouter
 class LeftNav extends Component {
@@ -74,38 +77,38 @@ class LeftNav extends Component {
       }
     }
   }
-  // 点击菜单,右侧顶部显示对应的title内容
-  selectItem = ({ key }) => {
 
-    // const title=xxx.item.node.innerText
-    // this.props.setTitle(title)
-    const title = this.findTitle(key)
-    this.props.setTitle(title)
-  }
-  // 根据路径找title
-  findTitle = (pathname) => {
+  // 找key
+  findTitle = (pathName) => {
     for (let i = 0; i < menus.length; i++) {
-      const menu = menus[i]
+      const menu=menus[i]
       if (menu.children) {
-        for (let j = 0; j < menu.children.length; j++) {
+        for (var j = 0; j < menu.children.length; j++) {
           const cMenu = menu.children[j]
-          if (cMenu.key === pathname) {
+          if (cMenu.key === pathName) {
             return cMenu.title
           }
         }
       } else {
-        if (menu.key === pathname) {
+        if (menu.key === pathName) {
           return menu.title
         }
       }
     }
   }
-  // 界面渲染完毕
-  componentDidMount() {
-    // 根据路径找title
-    const { location: { pathname } } = this.props
-    const title = this.findTitle(pathname)
-    this.props.setTitle(title)
+  selectItem = ({ key }) => {
+   
+    // const title=item.node.innerText
+    // 找title----此时的key是路径
+   
+    const title = this.findTitle(key)
+    // // 修改title
+    this.props.updateTitle(title)
+  }
+  componentDidMount(){
+    const {pathname}=this.props.location
+    const title=this.findTitle(pathname)
+    this.props.updateTitle(title)
   }
   render() {
     // 调用方法显示菜单
@@ -128,7 +131,7 @@ class LeftNav extends Component {
         }
 
       </Menu>
-    )
+    );
   }
 }
 

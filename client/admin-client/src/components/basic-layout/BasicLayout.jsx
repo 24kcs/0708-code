@@ -39,19 +39,16 @@ class BasicLayout extends Component {
         <Layout>
          
           <HeaderMain />
-          <Content style={{ margin: '0 16px' }}>
-            <Breadcrumb style={{ margin: '16px 0' }}>
-              <Breadcrumb.Item>User</Breadcrumb.Item>
-              <Breadcrumb.Item>Bill</Breadcrumb.Item>
-            </Breadcrumb>
-            <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
+          <Content style={{ margin: '20px' }}>
+            
+            <div style={{ padding: 10, background: '#fff', minHeight: 420 }}>
               {
                 // children代表的是当前这个父级组件的所有的子级组件
                 this.props.children
               }
             </div>
           </Content>
-          <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+          <Footer style={{ textAlign: 'center' }}>欢迎使用硅谷后台管理系统~~</Footer>
         </Layout>
       </Layout>
 
