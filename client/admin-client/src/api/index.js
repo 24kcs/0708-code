@@ -24,3 +24,20 @@ export const reqAddCategory = (categoryName) => ajax({
     categoryName
   }
 })
+// 更新分类信息数据的接口
+export const reqUpdateCategory=(categoryId,categoryName)=>ajax({
+  method:'POST',
+  url:'/category/update',
+  data:{
+    categoryId,
+    categoryName
+  }
+})
+// 删除分类信息的数据的接口
+export const reqDeleteCategory=(categoryId)=>ajax({
+  method:'POST',
+  url:'/category/delete',
+  data:{
+    categoryId
+  }
+})

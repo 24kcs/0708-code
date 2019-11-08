@@ -4,13 +4,13 @@ import { Card, Table, Button, Icon, Modal } from 'antd';
 // 引入connect
 import { connect } from 'react-redux'
 // 引入action-creators.js
-import { getCategories, addCategory } from '../../redux/action-creators.js'
+import { getCategories, addCategory ,updateCategory,delCategory} from '../../redux/action-creators.js'
 // 引入样式
 import './Category.less'
 // 引入增加或者修改的组件
 import AddUpdateCategory from './add-update-category/AddUpdateCategory.jsx'
 
-@connect(state => ({ categories: state.categories }), { getCategories, addCategory })
+@connect(state => ({ categories: state.categories }), { getCategories, addCategory,updateCategory,delCategory })
 class Category extends Component {
   // 状态数据
   state = {
@@ -37,12 +37,26 @@ class Category extends Component {
         return (
           <div>
             <Button type="link" onClick={() => { this.showUpdate(category) }}>修改分类</Button>
-            <Button type="link">删除分类</Button>
+            <Button type="link" onClick={()=>{this.showDel(category._id)}}>删除分类</Button>
           </div>
         )
       }
     },
   ];
+  // 删除操作
+  showDel=(categoryId)=>{
+    Modal.confirm({
+      title: '确认删除吗',
+      okText:'确认',
+      cancelText:'取消',
+      // 箭头函数
+      onOk:()=> {
+        this.props.delCategory(categoryId)
+      }
+    })
+  }
+
+
   // 显示更新分类的对话框
   showUpdate = (category) => {
     // 永久保存当前点击的这一行的category对象
@@ -73,9 +87,26 @@ class Category extends Component {
       isShowAdd: false
     })
   }
-  // 确定封信分类数据的操作
+  // 确定更新分类数据的操作
   updateCategory = () => {
+    // 更新数据
+    this.form.validateFields((err, values) => {
+      if(!err){
+        // 验证已经通过了
+        // 分类信息的名字
+        const categoryName=values.categoryName
+        // 分类信息的id
+        const categoryId=this.category._id
+        this.props.updateCategory(categoryId,categoryName)
+        // 关闭窗口,干掉文本框的数据
+        this.form.resetFields() //清空所有文本框的数据
+        this.setState({
+          isShowUpdate: false
+        })
 
+      }
+    })
+     
   }
   // 隐藏更新分类的对话框
   hideUpdate = () => {
