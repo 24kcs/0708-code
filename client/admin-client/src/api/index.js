@@ -1,7 +1,6 @@
 // 是接口文件,包含了多个封装的接口
 // 调用二次封装的axios
 import ajax from './ajax.js'
-import axios from './ajax.js'
 // 封装接口了---发送请求
 export const reqLogin = (username, password) => ajax({
   method: 'POST',
@@ -11,4 +10,17 @@ export const reqLogin = (username, password) => ajax({
     password
   }
 })
+// 获取分类信息数据的接口
+export const reqCategories = () => ajax({
+  method: 'GET',
+  url: '/category/get'
+})
 
+// 添加分类信息数据的接口
+export const reqAddCategory = (categoryName) => ajax({
+  method: 'POST',
+  url: '/category/add',
+  data: {
+    categoryName
+  }
+})

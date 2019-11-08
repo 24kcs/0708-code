@@ -11,7 +11,7 @@ import WithCheckLogin from '../../containers/with-check-login/WithCheckLogin.jsx
 import HeaderMain from '../header-main/HeaderMain.jsx'
 // 引入实现国际化的翻译的相关的包,高阶组件
 import { withTranslation } from 'react-i18next';
-const {  Content, Footer, Sider } = Layout;
+const { Content, Footer, Sider } = Layout;
 // 国际化高阶组件
 @withTranslation()
 @WithCheckLogin

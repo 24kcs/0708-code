@@ -22,10 +22,10 @@ axios.defaults.baseURL = `http://localhost:3000/api`
 axios.interceptors.request.use((config) => {
   // 获取config对象中的data参数
   let data = config.data
-  if (data && data instanceof Object) {
+  if(data&&data instanceof Object){
     config.data = qs.stringify(data)
   }
-
+ 
   // 先获取token-----store中---redux---getState().user.token
   const token = store.getState().user.token
   // 判断---token是否存在
@@ -37,13 +37,13 @@ axios.interceptors.request.use((config) => {
 
 })
 // 响应拦截器
-axios.interceptors.response.use((response) => {
+axios.interceptors.response.use((response)=>{
   return response.data
-}, (error) => {
+},(error)=>{
   // 好多的错误要进行处理
-  message.error('未知错误' + error)
+  message.error('未知错误'+error)
   // 中断错误消息
-  return new Promise(() => { })
+  return new Promise(()=>{})
 
 })
 // 暴露axios对象
