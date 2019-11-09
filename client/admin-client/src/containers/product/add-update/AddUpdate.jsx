@@ -1,14 +1,22 @@
 import React, { Component } from 'react';
 import { Card, Input, Button, Icon, Select, InputNumber, Form } from 'antd'
 // 引入connect
-import {connect} from 'react-redux'
-import {getCategories} from '../../../redux/action-creators.js'
+import { connect } from 'react-redux'
+import { getCategories } from '../../../redux/action-creators.js'
+// 引入高大上的富文本编辑器
+import TextEditor from './text-editor/TextEditor.jsx'
+
+// 负责转换数据效果的
+import { convertToRaw } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
+// 引入api接口
+import { reqAddProduct } from '../../../api/index.js'
 // 解构出Option和Item
 const { Option } = Select
 const { Item } = Form
 
 // 装饰器
-@connect((state)=>({categories:state.categories}),{getCategories})
+@connect((state) => ({ categories: state.categories }), { getCategories })
 @Form.create()
 class AddUpdate extends Component {
 
@@ -16,14 +24,25 @@ class AddUpdate extends Component {
   submit = (e) => {
     // 阻止事件的默认行为
     e.preventDefault()
-    // ===============================坑==================
+    this.props.form.validateFields(async (err, values) => {
+      if (!err) {
+        console.log(values)
+        const editorState = this.editor.state.editorState
+        const detail = draftToHtml(convertToRaw(editorState.getCurrentContent()))
+        const { categoryId, name, price, desc } = values
+        // 发送请求,真正的添加数据
+        await reqAddProduct({ categoryId, name, price, desc, detail })
+        this.props.history.push('/product')
+
+      }
+    });
   }
   // 界面渲染完毕
-  componentDidMount(){
+  componentDidMount() {
     // 发送请求,获取分类信息
     // 判断,如果有数据,就不发送请求
-   
-    if(this.props.categories.length===0){
+
+    if (this.props.categories.length === 0) {
       this.props.getCategories()
     }
   }
@@ -31,7 +50,7 @@ class AddUpdate extends Component {
     // 很重要,要做表单的验证
     const { getFieldDecorator } = this.props.form;
     // 解构出categories数据
-    const {categories} =this.props
+    const { categories } = this.props
     return (
       <Card
         title={
@@ -69,11 +88,11 @@ class AddUpdate extends Component {
               })(
                 <Select placeholder="请选择商品分类">
                   {
-                    categories.map(category=>{
-                    return  <Option key={category._id} value={category._id}>{category.name}</Option>
+                    categories.map(category => {
+                      return <Option key={category._id} value={category._id}>{category.name}</Option>
                     })
                   }
-                 
+
                 </Select>
               )
             }
@@ -92,9 +111,13 @@ class AddUpdate extends Component {
             }
 
           </Item>
-          <Item>
+          <Item wrapperCol={{ span: 20 }} >
+            <TextEditor setEditor={(editor) => { this.editor = editor }} />
+          </Item>
+          <Item >
             <Button type="primary" htmlType="submit">提交</Button>
           </Item>
+
         </Form>
       </Card>
     );

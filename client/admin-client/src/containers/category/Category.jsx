@@ -86,6 +86,7 @@ class Category extends Component {
   }
   // 隐藏添加分类的对话框
   hideAdd = () => {
+    delete this.category
     // 重置AddUpdateCategory组件中的文本框的数据
     this.form.resetFields() //清空所有文本框的数据
     this.setState({
@@ -104,10 +105,11 @@ class Category extends Component {
         const categoryId = this.category._id
         this.props.updateCategory(categoryId, categoryName)
         // 关闭窗口,干掉文本框的数据
-        this.form.resetFields() //清空所有文本框的数据
-        this.setState({
-          isShowUpdate: false
-        })
+        this.hideUpdate()
+        // this.form.resetFields() //清空所有文本框的数据
+        // this.setState({
+        //   isShowUpdate: false
+        // })
 
       }
     })
