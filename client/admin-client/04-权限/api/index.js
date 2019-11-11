@@ -66,7 +66,7 @@ export const reqAddProduct = ({ categoryId, name, price, desc, detail }) => ajax
   }
 })
 
-// 更新商品信息数据的接口
+// 修改商品
 export const reqUpdateProduct = ({ productId, categoryId, name, price, desc, detail }) => ajax({
   method: 'POST',
   url: '/product/update',
@@ -80,7 +80,7 @@ export const reqUpdateProduct = ({ productId, categoryId, name, price, desc, det
   }
 })
 
-// 删除商品信息数据的接口
+// 删除商品
 export const reqDeleteProduct = (productId) => ajax({
   method: 'POST',
   url: '/product/delete',
@@ -89,19 +89,34 @@ export const reqDeleteProduct = (productId) => ajax({
   }
 })
 
-// 搜索商品信息数据的接口
-export const reqSearchProduct = ({searchKey,searchValue,pageNum,pageSize}) => ajax({
+// 搜索商品
+export const reqSearchProduct = ({ searchKey, searchValue, pageNum, pageSize }) => ajax({
   method: 'GET',
   url: '/product/search',
   params: {
-   
-    // productName:'去污粉',
-    // // 或者
-    // productDesc:'真好'
-
-    [searchKey]:searchValue,
+    [searchKey]: searchValue,
     pageNum,
     pageSize
+  }
+})
 
+// 获取角色列表数据
+export const reqGetRoles = () => ajax('/role/get')
+
+// 添加角色
+export const reqAddRole = (name) => ajax({
+  method: 'POST',
+  url: '/role/add',
+  data: {
+    name
+  }
+})
+
+// 删除角色
+export const reqDelRole = (roleId) => ajax({
+  method: 'POST',
+  url: '/role/delete',
+  data: {
+    roleId
   }
 })

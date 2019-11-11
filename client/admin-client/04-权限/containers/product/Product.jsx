@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 // 引入antd
-import { Card, Select, Input, Icon, Button, Table ,Modal} from 'antd'
+import { Card, Select, Input, Icon, Button, Table, Modal } from 'antd'
 // 引入样式
 import './Product.less'
 
 // 引入api/接口
-import { reqGetProducts,reqDeleteProduct } from '../../api/index.js'
+import { reqGetProducts, reqDeleteProduct, reqSearchProduct } from '../../api/index.js'
 // 解构出Option
 const { Option } = Select
 class Product extends Component {
@@ -45,44 +45,61 @@ class Product extends Component {
           <div>
             <Button type="link">详情</Button>
             <Button type="link" onClick={() => { this.showAddUpdate(product) }}>修改</Button>
-            <Button type="link" onClick={() => { this.delProduct(product._id) }}>删除</Button>
+            <Button type="link" onClick={() => this.del(product._id)}>删除</Button>
           </div>
         )
       }
     }
   ]
-  // 删除操作
-  delProduct = (productId) => {
+  del = (id) => {
     Modal.confirm({
       title: '确认删除吗',
       okText: '确认',
       cancelText: '取消',
       // 箭头函数
       onOk: async () => {
-        // 调用删除数据的接口
-        await reqDeleteProduct(productId)
-        // 坑=========================
-        this.getProducts(1, 3) 
+        await reqDeleteProduct(id)
+        // 重新渲染组件即可
+        this.getProducts(1, 3)
       }
     })
+
   }
   // 状态数据
   state = {
     products: [], // 用来存储所有商品的信息的(数组,里面是对象)
     total: 0, // 总数据条数
-    searchKey:'productName', // 默认搜索的是 商品名字
-    searchValue:'' // 默认搜索的是空的内容---文本框没有内容输入
+    searchKey: 'productName', // 搜索的内容要么是productName,要么就是 productDesc productName
+    searchValue: '', // 搜素内容
+    isSearch: false, // 是否搜索过
+    pageNum: 1, // 默认搜索一页
+    pageSize: 3, // 默认搜索3条
+    prevSearchValue: '' // 初始化的值是空的
   }
   // 发送请求获取商品的信息数据
   getProducts = async (pageNum, pageSize) => {
-    const result = await reqGetProducts(pageNum, pageSize)
+    const { isSearch, prevSearchValue } = this.state
+    let result
+    if (isSearch) {
+      const { searchKey } = this.state
+      // 搜索过,调用搜索的接口
+      result = await reqSearchProduct({ searchKey, searchValue: prevSearchValue, pageNum, pageSize })
+    } else {
+      // 没搜索过,调用正常的接口
+      result = await reqGetProducts(pageNum, pageSize)
+    }
+
     if (result.status === 0) {
       // 更新状态数据
       this.setState({
         products: result.data.list, // 商品数组信息
-        total: result.data.total // 总条数
+        total: result.data.total, // 总条数
+        pageNum,
+        pageSize,
+        searchValue: prevSearchValue
       })
     }
+
   }
   // 界面渲染完毕
   componentDidMount() {
@@ -94,32 +111,44 @@ class Product extends Component {
     // 跳转
     this.props.history.push('/product/addupdate', product)
   }
-  // 如果下拉框选中的内容发生改变,就会触发这个事件
-  select=(value)=>{
-      // 如果选中内容改变,就更新状态数据
-      this.setState({
-        searchKey:value
-      })
-  }
-  // 获取文本框中的数据,只要内容改变,该事件就触发,就可以实时的获取文本框的内容
-  changeInput=(e)=>{
+  // 修改搜索的key
+  select = (value) => {
     this.setState({
-      searchValue:e.target.value
+      searchKey: value
+    })
+  }
+  // 修改搜索的内容
+  change = (e) => {
+    this.setState({
+      searchValue: e.target.value
+    })
+  }
+  searchHandle = async () => {
+
+    // 取出要搜索的key和value
+    const { searchKey, searchValue, pageNum, pageSize } = this.state
+    const result = await reqSearchProduct({ searchKey, searchValue, pageNum, pageSize })
+    this.setState({
+      products: result.data.list,
+      total: result.data.total,
+      isSearch: true,
+      prevSearchValue: searchValue // 存储这一次搜索的value值
     })
   }
   render() {
     // 解构出products
-    const { products, total,searchKey } = this.state
+    const { products, total, searchKey, searchValue } = this.state
     return (
       <Card
         title={
           <div>
             <Select value={searchKey} onChange={this.select}>
-              <Option key="1" value="productName">根据商品名称</Option>
-              <Option key="2" value="productDesc">根据商品描述</Option>
+
+              <Option key="productName" value="productName">根据商品名称</Option>
+              <Option key="productDesc" value="productDesc">根据商品描述</Option>
             </Select>
-            <Input placeholder="关键字" className="product-input" onChange={this.changeInput} />
-            <Button type="primary">搜索</Button>
+            <Input placeholder="关键字" value={searchValue} className="product-input" onChange={this.change} />
+            <Button type="primary" onClick={this.searchHandle}>搜索</Button>
           </div>
         }
         extra={

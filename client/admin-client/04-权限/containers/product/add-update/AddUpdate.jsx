@@ -26,23 +26,23 @@ class AddUpdate extends Component {
     e.preventDefault()
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
+        console.log(values)
         const editorState = this.editor.state.editorState
         const detail = draftToHtml(convertToRaw(editorState.getCurrentContent()))
         const { categoryId, name, price, desc } = values
-
-        // 商品的id信息
-        const product = this.props.location.state
-        if (product) {
-
-          const productId = product._id
-          // 发送请求,更新商品信息数据
+        // 判断是添加还是修改
+        if (this.props.location.state) {
+          const productId = this.props.location.state._id
+          //修改
           await reqUpdateProduct({ productId, categoryId, name, price, desc, detail })
+          // 替换操作
+          this.props.history.replace('/product')
         } else {
           // 发送请求,真正的添加数据
           await reqAddProduct({ categoryId, name, price, desc, detail })
+          // 替换操作
+          this.props.history.replace('/product')
         }
-        this.props.history.replace('/product')
-
 
 
       }
@@ -62,14 +62,15 @@ class AddUpdate extends Component {
     const { getFieldDecorator } = this.props.form;
     // 解构出categories数据
     const { categories } = this.props
-    // 获取路由跳转后,传入进来的参数数据
     const product = this.props.location.state || {}
+    // product=product||{}
+    // console.log(this.props)
     return (
       <Card
         title={
           <div>
             <Icon onClick={() => { this.props.history.goBack() }} type="arrow-left" />
-        <span>{product._id?'修改':'添加'}商品</span>
+            <span>添加商品</span>
           </div>
         }
       >
@@ -102,8 +103,7 @@ class AddUpdate extends Component {
                 rules: [{ required: true, message: '请选择商品分类' }],
                 initialValue: product.categoryId || '请选择商品分类'
               })(
-                <Select placeholder="请选择商品分类" style={{ color: '#ccc' }}>
-
+                <Select placeholder="请选择商品分类" >
                   {
                     categories.map(category => {
                       return <Option key={category._id} value={category._id}>{category.name}</Option>

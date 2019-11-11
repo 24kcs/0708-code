@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
-import { EditorState, convertToRaw, ContentState } from 'draft-js';
+import { EditorState, ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
-import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
-
-
 
 // 引入默认的样式
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -15,28 +12,30 @@ import PropTypes from 'prop-types'
 class TextEditor extends Component {
   static propTypes = {
     setEditor: PropTypes.func.isRequired,
-    detail: PropTypes.string
+    detail: PropTypes.string.isRequired
+
   }
   // 初始化的时候调用这个方法
   constructor(props) {
     super(props)
     this.props.setEditor(this)
-    const detail = this.props.detail
     let editorState
-    if (detail) {
-      const blocksFromHtml = htmlToDraft(detail)
-      const { contentBlocks, entityMap } = blocksFromHtml
-      const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap)
-       editorState = EditorState.createWithContent(contentState)
+    if (this.props.detail) {
+      const blocksFromHtml = htmlToDraft(this.props.detail);
+      const { contentBlocks, entityMap } = blocksFromHtml;
+      const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+      editorState = EditorState.createWithContent(contentState);
     } else {
-       editorState = EditorState.createEmpty()
+      editorState= EditorState.createEmpty()
     }
-    // 限定传入过来的数据的类型及是否是必须的
-    // 状态
+
     this.state = {
       editorState
     }
+
   }
+  // 限定传入过来的数据的类型及是否是必须的
+  // 状态
 
 
   onEditorStateChange = (editorState) => {
