@@ -62,7 +62,9 @@ class Product extends Component {
         // 调用删除数据的接口
         await reqDeleteProduct(productId)
         // 坑=========================
-
+        this.setState({
+          current:1
+        })
         this.getProducts(1, 3)
       }
     })
@@ -77,6 +79,7 @@ class Product extends Component {
     pageSize: 3,
     isSearch: false,  // 默认是正常的获取数据,如果为true则是搜索的方式来获取数据
     prevStateValue: '',
+    current:1
 
   }
   // 发送请求获取商品的信息数据
@@ -104,8 +107,7 @@ class Product extends Component {
         products: result.data.list, // 商品数组信息
         total: result.data.total, // 总条数
         searchValue: prevStateValue,
-        pageNum,
-        pageSize
+         current:pageNum
       })
     }
   }
@@ -139,7 +141,7 @@ class Product extends Component {
     let { searchKey, searchValue, pageNum, pageSize } = this.state
     // 调用搜索接口,进行搜索
     const result = await reqSearchProduct({ searchKey, searchValue, pageNum, pageSize })
-
+    //this.refs.tb.props.pagination.
     if (result.status === 0) {
 
       // 更新状态数据
@@ -148,7 +150,8 @@ class Product extends Component {
         total: result.data.total,
         isSearch: true, // 原来默认是false,如果是搜索了,那么此时为true
         // 是否需要更新其他数据======
-        prevStateValue: searchValue
+        prevStateValue: searchValue,
+         current:1
       })
 
     }
@@ -157,7 +160,7 @@ class Product extends Component {
 
   render() {
     // 解构出products
-    const { products, total, searchKey, searchValue, pageNum } = this.state
+    const { products, total, searchKey, searchValue, pageNum ,current} = this.state
     return (
       <Card
         title={
@@ -181,6 +184,7 @@ class Product extends Component {
           bordered
           rowKey="_id"
           pagination={{
+            
             showSizeChanger: true,
             showQuickJumper: true,
             defaultPageSize: 3,
@@ -188,7 +192,8 @@ class Product extends Component {
             pageSizeOptions: ['3', '6', '9', '12'],
             total,
             onChange: this.getProducts,
-            onShowSizeChange: this.getProducts
+            onShowSizeChange: this.getProducts,
+            current
           }}
 
         />
