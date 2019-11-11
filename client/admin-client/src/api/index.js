@@ -94,14 +94,12 @@ export const reqSearchProduct = ({searchKey,searchValue,pageNum,pageSize}) => aj
   method: 'GET',
   url: '/product/search',
   params: {
-   
-    // productName:'去污粉',
-    // // 或者
-    // productDesc:'真好'
-
     [searchKey]:searchValue,
     pageNum,
     pageSize
 
   }
 })
+
+// 获取角色的信息数据的接口
+export const reqGetRoles=()=>ajax('/role/get')

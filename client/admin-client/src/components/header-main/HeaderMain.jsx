@@ -52,14 +52,17 @@ class HeaderMain extends Component {
   // 界面渲染完毕的生命周期函数
   componentDidMount() {
     screenfull.on('change', this.screenChange);
-    setInterval(()=>{
+    this.timeId=setInterval(()=>{
       this.setState({
         time:dayjs().format('YYYY-MM-DD hh:mm:ss')
       })
     },1000)
   }
+
   // 组件卸载的生命周期函数
   componentWillUnmount() {
+    clearInterval(this.timeId)
+    // 干掉全屏
     screenfull.off('change', this.screenChange);
   }
   // 国际化
