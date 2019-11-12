@@ -1,8 +1,8 @@
 // 包含了多个同步及异步的action的creator---包含了多个生产action对象的工厂函数
 // 引入action的type
-import { SAVE_USER, REMOVE_USER, UPDATE_TITLE, GET_CATEGORIES, ADD_CATEGORY, UPDATE_CATEGORY, DEL_CATEGORY, GET_ROLES,ADD_ROLE,UPDATE_ROLE,DELETE_ROLE } from './action-types.js'
+import { SAVE_USER, REMOVE_USER, UPDATE_TITLE, GET_CATEGORIES, ADD_CATEGORY, UPDATE_CATEGORY, DEL_CATEGORY, GET_ROLES, ADD_ROLE, UPDATE_ROLE, DELETE_ROLE, GET_USERS } from './action-types.js'
 // 引入接口文件
-import { reqCategories, reqAddCategory, reqUpdateCategory, reqDeleteCategory, reqGetRoles, reqAddRole, reqUpdateRole, reqDeleteRole } from '../api/index.js'
+import { reqCategories, reqAddCategory, reqUpdateCategory, reqDeleteCategory, reqGetRoles, reqAddRole, reqUpdateRole, reqDeleteRole, reqGetUsers } from '../api/index.js'
 
 
 // 保存用户信息(的同时也要保存token)
@@ -95,9 +95,9 @@ export const addRole = (name) => {
 
 
 // 修改角色信息数据的同步action对象
-const updateRoleSuccess=(role)=>({type:UPDATE_ROLE,data:role})
+const updateRoleSuccess = (role) => ({ type: UPDATE_ROLE, data: role })
 // 修改角色信息数据的异步action函数
-export const updateRole=(roleId, authName, menus)=>{
+export const updateRole = (roleId, authName, menus) => {
   return async (dispatch) => {
     const result = await reqUpdateRole(roleId, authName, menus)
     if (result.status === 0) {
@@ -108,13 +108,28 @@ export const updateRole=(roleId, authName, menus)=>{
 
 
 // 删除角色信息数据的同步action对象
-const deleteRoleSuccess=(roleId)=>({type:DELETE_ROLE,data:roleId})
+const deleteRoleSuccess = (roleId) => ({ type: DELETE_ROLE, data: roleId })
 // 删除角色信息数据的异步action函数
-export const deleteRole=(roleId)=>{
+export const deleteRole = (roleId) => {
   return async (dispatch) => {
     const result = await reqDeleteRole(roleId)
     if (result.status === 0) {
       dispatch(deleteRoleSuccess(roleId))
+    }
+  }
+}
+
+
+
+
+// 获取用户信息数据的同步action对象
+const getUsersSuccess = (users) => ({ type: GET_USERS, data: users })
+// 获取用户信息数据的异步action对象
+export const getUsers = () => {
+  return async (dispatch) => {
+    const result = await reqGetUsers()
+    if (result.status === 0) {
+      dispatch(getUsersSuccess(result.data))
     }
   }
 }

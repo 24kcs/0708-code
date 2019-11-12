@@ -4,20 +4,21 @@ import dayjs from "dayjs";
 
 import AddUserForm from './add-user-form';
 import UpdateUserForm from './update-user-form';
+import {connect} from 'react-redux'
+import {getUsers} from '../../redux/action-creators.js'
 
+
+@connect(state=>({users:state.users}),{getUsers})
 class User extends Component {
+  // 状态数据
   state = {
-    users: [{
-      _id: "5c7dafe855fb843490b93a49",
-      createTime: 1551740904866,
-      email: "aaa@aaa.com",
-      phone: "123456789",
-      roleId: "5c7d222c12d5e51908cc0380",
-      username: "aaa"
-    }], //用户数组
     isShowAddUserModal: false, //是否展示创建用户的标识
     isShowUpdateUserModal: false, //是否展示更新用户的标识
   };
+  componentDidMount(){
+    // 获取用户信息
+    this.props.getUsers()
+  }
 
   addUserFormRef = React.createRef();
   updateUserFormRef = React.createRef();
@@ -72,8 +73,8 @@ class User extends Component {
   };
   
   render () {
-    const { users, isShowAddUserModal, isShowUpdateUserModal } = this.state;
-    
+    const { isShowAddUserModal, isShowUpdateUserModal } = this.state;
+    const {users}=this.props
     return (
       <Card
         title={

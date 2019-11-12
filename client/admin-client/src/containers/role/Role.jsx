@@ -7,7 +7,7 @@ import UpdateRoleForm from './update-role-form';
 // 引入高阶组件
 import { connect } from 'react-redux'
 // 引入action-creators.js
-import { getRoles, addRole, updateRole } from '../../redux/action-creators.js'
+import { getRoles, addRole, updateRole,deleteRole } from '../../redux/action-creators.js'
 
 // 日期格式化
 import dayjs from 'dayjs'
@@ -18,7 +18,7 @@ import PubSub from 'pubsub-js'
 const RadioGroup = Radio.Group;
 
 //装饰器
-@connect((state) => ({ roles: state.roles, username: state.user.user.username }), { getRoles, addRole, updateRole })
+@connect((state) => ({ roles: state.roles, username: state.user.user.username }), { getRoles, addRole, updateRole,deleteRole })
 class Role extends Component {
   // 界面渲染完毕
   componentDidMount() {
@@ -66,14 +66,26 @@ class Role extends Component {
     render: (role) => {
       return (
         <div>
-          <Button type="link" onClick={() => { this.updateRole(role) }}>修改</Button>
-          &nbsp;
-          <Button disabled type="link" onClick={() => { this.delRole(role._id) }}>删除</Button>
+          <Button type="link" onClick={() => { this.delRole(role._id) }}>删除</Button>
         </div>
       )
     }
   }
   ];
+  // 删除操作
+  delRole = (roleId) => {
+    // 弹框,提示,是否确认删除
+    Modal.confirm({
+      title: '确认删除吗',
+      okText: '确认',
+      cancelText: '取消',
+      // 箭头函数
+      onOk: () => {
+        // 删除操作
+        this.props.deleteRole(roleId)
+      }
+    })
+  }
 
   onRadioChange = (e) => {
     // 此时e.target.value-----当前选中的这一行数据的id值

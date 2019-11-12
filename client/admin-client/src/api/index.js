@@ -131,3 +131,37 @@ export const reqDeleteRole = (roleId) => ajax({
     roleId
   }
 })
+
+
+// 获取用户的信息数据的接口
+export const reqGetUsers = () => ajax('/user/get')
+// 添加用户的信息数据的接口
+export const reqAddUser = ({ username, password, phone, email, roleId }) => ajax({
+  method: 'POST',
+  url: '/user/add',
+  data: {
+    username,
+    password,
+    phone,
+    email,
+    roleId
+
+  }
+})
+// 修改用户的信息数据的接口
+export const reqUpdateUser = (username, password) => ajax({
+  method: 'POST',
+  url: '/user/update',
+  data: {
+    username,
+    password
+  }
+})
+// 删除用户的信息数据的接口
+export const reqDeleteUser = (username) => ajax({
+  method: 'POST',
+  url: '/user/delete',
+  data: {
+    username
+  }
+})
