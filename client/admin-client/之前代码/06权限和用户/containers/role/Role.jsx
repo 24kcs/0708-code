@@ -7,30 +7,25 @@ import UpdateRoleForm from './update-role-form';
 // 引入高阶组件
 import { connect } from 'react-redux'
 // 引入action-creators.js
-import { getRoles, addRole, updateRole } from '../../redux/action-creators.js'
-
-// 日期格式化
+import { getRoles,addRole ,deleteRole,updateRole} from '../../redux/action-creators.js'
 import dayjs from 'dayjs'
-// 消息订阅
 import PubSub from 'pubsub-js'
-
 // 单选
 const RadioGroup = Radio.Group;
 
 //装饰器
-@connect((state) => ({ roles: state.roles, username: state.user.user.username }), { getRoles, addRole, updateRole })
+@connect((state) => ({ roles: state.roles,username:state.user.user.username }), { getRoles,addRole,deleteRole,updateRole})
 class Role extends Component {
   // 界面渲染完毕
   componentDidMount() {
     this.props.getRoles()
-    // 订阅消息
-    this.pubToken = PubSub.subscribe('getCheckedKeys', (msg, data) => {
-      // 保存当前传过来的选中的所有的菜单的路径
-      this.checkedKeys = data
-    });
+    this.tokenPub=PubSub.subscribe('getCheckedKeys',(msg,data)=>{
+      this.checkedKeys=data
+    })
+
   }
-  componentWillUnmount() {
-    PubSub.unsubscribe(this.pubToken);
+  componentWillUnmount(){
+    PubSub.unsubscribe(this.tokenPub);
   }
   state = {
     value: '',  //单选的默认值，也就是选中的某个角色的id值
@@ -38,6 +33,9 @@ class Role extends Component {
     isShowUpdateRoleModal: false, //是否展示设置角色的标识
     isDisabled: true
   };
+
+  // addRoleFormRef =this.addRoleForm 
+  // updateRoleFormRef =this.updateRoleForm 
 
   columns = [{
     dataIndex: '_id',
@@ -48,14 +46,14 @@ class Role extends Component {
   }, {
     title: '创建时间',
     dataIndex: 'createTime',
-    render: (time) => {
-      return time && dayjs(time).format('YYYY-MM-DD hh:mm:ss')
+    render:(time)=>{
+      return dayjs(time).format('YYYY-MM-DD hh:mm:ss')
     }
   }, {
     title: '授权时间',
     dataIndex: 'authTime',
-    render: (time) => {
-      return time && dayjs(time).format('YYYY-MM-DD hh:mm:ss')
+    render:(time)=>{
+      return time&&dayjs(time).format('YYYY-MM-DD hh:mm:ss')
     }
   }, {
     title: '授权人',
@@ -66,17 +64,28 @@ class Role extends Component {
     render: (role) => {
       return (
         <div>
-          <Button type="link" onClick={() => { this.updateRole(role) }}>修改</Button>
+          <Button type="link" >修改</Button>
           &nbsp;
-          <Button disabled type="link" onClick={() => { this.delRole(role._id) }}>删除</Button>
+          <Button type="link" onClick={()=>{this.delRole(role._id)}}>删除</Button>
         </div>
       )
     }
   }
   ];
+  // 删除操作
+  delRole=(roleId)=>{
+    Modal.confirm({
+      title: '确认删除吗',
+      okText: '确认',
+      cancelText: '取消',
+      // 箭头函数
+      onOk: () => {
+        this.props.deleteRole(roleId)
+      }
+    })
+  }
 
   onRadioChange = (e) => {
-    // 此时e.target.value-----当前选中的这一行数据的id值
     console.log('radio checked', e.target.value);
     // e.target.value=====>当前这条数据的id值
     this.setState({
@@ -93,42 +102,37 @@ class Role extends Component {
 
   //创建角色的回调函数
   addRole = () => {
-    // 添加角色数据
-    // 先看表单的验证是否全都通过
-    // 获取name
-    // 调用异步action函数
-    this.addRoleFormRef.validateFields((err, values) => {
+    const form=this.addRoleFormRef
+    form.validateFields((err, values) => {
       if (!err) {
-        const { name } = values
+        const {name}=values
         this.props.addRole(name)
-        // 关闭当前的对话框
-        this.setState({
-          isShowAddRoleModal: false
-        })
+          // 清空
+          form.resetFields()
+          // 隐藏窗口
+          this.setState({
+            isShowAddRoleModal: false
+          })
       }
     });
-  };
+   };
   //设置角色权限的回调函数
   updateRole = () => {
-    // 需要使用keys
-
-    const roleId = this.state.value  // 角色的id
-    const authName = this.props.username // 当前的授权人,登录的人
-    const menus = this.checkedKeys // 选中的菜单路径
-    this.props.updateRole(roleId, authName, menus)
-    // 关闭窗口
+    // 获取子级组件选中的所有的菜单
+    const authName=this.props.username
+    const roleId=this.state.value
+    const menus=this.checkedKeys
+    // 更新状态数据
+    this.props.updateRole(roleId,authName,menus)
     this.setState({
-      isShowUpdateRoleModal: false
+      isShowUpdateRoleModal:false
     })
 
-  };
-
+   };
   render() {
     const { value, isDisabled, isShowAddRoleModal, isShowUpdateRoleModal } = this.state;
     const { roles } = this.props
-    // 获取当前训中的这个单选框对应的这一行数据(role对象),根据id进行查找
-    const role = roles.find(role => role._id === value)
-
+    const role=roles.find(role=>role._id===value)
     return (
       <Card
         title={

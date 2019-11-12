@@ -7,29 +7,28 @@ import UpdateRoleForm from './update-role-form';
 // 引入高阶组件
 import { connect } from 'react-redux'
 // 引入action-creators.js
-import { getRoles, addRole, updateRole } from '../../redux/action-creators.js'
-
-// 日期格式化
+import { getRoles, addRole, deleteRole,updateRole } from '../../redux/action-creators.js'
+// 引入dayjs
 import dayjs from 'dayjs'
-// 消息订阅
-import PubSub from 'pubsub-js'
 
+// 引入PubSub
+import PubSub from 'pubsub-js'
 // 单选
 const RadioGroup = Radio.Group;
 
 //装饰器
-@connect((state) => ({ roles: state.roles, username: state.user.user.username }), { getRoles, addRole, updateRole })
+@connect((state) => ({ roles: state.roles,username:state.user.user.username }), { getRoles, addRole, deleteRole,updateRole })
 class Role extends Component {
   // 界面渲染完毕
   componentDidMount() {
     this.props.getRoles()
-    // 订阅消息
-    this.pubToken = PubSub.subscribe('getCheckedKeys', (msg, data) => {
-      // 保存当前传过来的选中的所有的菜单的路径
-      this.checkedKeys = data
+    // 界面渲染完毕后,订阅消息
+    this.pubToken = PubSub.subscribe('getCheckKeys', (msg,data)=>{
+      this.checkKeys=data
     });
   }
-  componentWillUnmount() {
+  componentWillUnmount(){
+    // 取消消息订阅
     PubSub.unsubscribe(this.pubToken);
   }
   state = {
@@ -38,6 +37,7 @@ class Role extends Component {
     isShowUpdateRoleModal: false, //是否展示设置角色的标识
     isDisabled: true
   };
+
 
   columns = [{
     dataIndex: '_id',
@@ -76,7 +76,6 @@ class Role extends Component {
   ];
 
   onRadioChange = (e) => {
-    // 此时e.target.value-----当前选中的这一行数据的id值
     console.log('radio checked', e.target.value);
     // e.target.value=====>当前这条数据的id值
     this.setState({
@@ -93,15 +92,15 @@ class Role extends Component {
 
   //创建角色的回调函数
   addRole = () => {
-    // 添加角色数据
-    // 先看表单的验证是否全都通过
-    // 获取name
-    // 调用异步action函数
-    this.addRoleFormRef.validateFields((err, values) => {
+    // 添加角色信息
+    const addForm = this.addRoleFormRef
+
+    addForm.validateFields((err, values) => {
       if (!err) {
         const { name } = values
         this.props.addRole(name)
-        // 关闭当前的对话框
+        // 清空文本框,设置隐藏
+        addForm.resetFields()
         this.setState({
           isShowAddRoleModal: false
         })
@@ -109,26 +108,24 @@ class Role extends Component {
     });
   };
   //设置角色权限的回调函数
-  updateRole = () => {
-    // 需要使用keys
-
-    const roleId = this.state.value  // 角色的id
-    const authName = this.props.username // 当前的授权人,登录的人
-    const menus = this.checkedKeys // 选中的菜单路径
-    this.props.updateRole(roleId, authName, menus)
-    // 关闭窗口
+  updateRole = () => { 
+    // 更新状态数据,准备更新role权限,并关闭当前的对话框
+    const roleId=this.state.value
+    
+    const authName=this.props.username
+    
+    const  menus=this.checkKeys
+    // 更新数据
+    this.props.updateRole(roleId,authName,menus)
     this.setState({
-      isShowUpdateRoleModal: false
+      isShowUpdateRoleModal:false
     })
-
   };
 
   render() {
     const { value, isDisabled, isShowAddRoleModal, isShowUpdateRoleModal } = this.state;
     const { roles } = this.props
-    // 获取当前训中的这个单选框对应的这一行数据(role对象),根据id进行查找
-    const role = roles.find(role => role._id === value)
-
+    const role=roles.find(role=>role._id===value)
     return (
       <Card
         title={
