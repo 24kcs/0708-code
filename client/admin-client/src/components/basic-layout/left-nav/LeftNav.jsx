@@ -13,7 +13,7 @@ import { updateTitle } from '../../../redux/action-creators.js'
 const { SubMenu } = Menu;
 
 // 装饰器
-@connect(null, { updateTitle })
+@connect(state => ({ menus: state.user.user.menus }), { updateTitle })
 @withTranslation()
 @withRouter
 class LeftNav extends Component {
@@ -29,7 +29,7 @@ class LeftNav extends Component {
     )
   }
   // 创建菜单的
-  createMenus = () => {
+  createMenus = (menus) => {
     return menus.map(menu => {
       // 有没有二级的菜单
       if (menu.children) {
@@ -78,9 +78,11 @@ class LeftNav extends Component {
         }
       }
     }
+    
   }
   // 方法----根据路径找对应title
   findTitleByKey = (pathname) => {
+    const menus=this.checkMenus()
     // menus中找
     for (let i = 0; i < menus.length; i++) {
       const menu = menus[i]
@@ -100,11 +102,13 @@ class LeftNav extends Component {
         }
       }
     }
+    return '404'
+   
   }
   componentDidMount() {
     // 获取路径
     const { pathname } = this.props.location
-   
+
 
     // 根据路径找对应的title
     const title = this.findTitleByKey(pathname)
@@ -126,9 +130,38 @@ class LeftNav extends Component {
     this.props.updateTitle(title)
   }
 
+  // 校验menus
+  checkMenus = () => {
+    return menus.reduce((prev, current) => {
+      // config目录中的menus.js----文件中暴露出来的是menus数组---每个元素都是对象
+      // 当前登录的用户对象中也有一个menus----数组--中每一个元素都是字符串
+      // current-----对象----每个menu对象
+      // current.key-----每个字符串的路径
+      // 此时登录用户的menus数组中有当前的路径
+      const result = this.props.menus.includes(current.key)
+      if (result) {
+        prev.push(current)
+      } else if (current.children) {
+        const cMenus = current.children.filter(menu => this.props.menus.includes(menu.key))
+        if(cMenus.length){
+          prev.push({...current,children:cMenus})
+        }
+      }
+
+
+      return prev
+
+    }, [])
+  }
   render() {
     // 调用方法显示菜单
-    const menus = this.createMenus()
+    const newMenus = this.checkMenus()
+    const menus = this.createMenus(newMenus)
+
+
+
+
+
     // 获取当前组件的相对应的路径,如果要使用location对象,当前的组件要么有location属性,要么当前的组件应该是一个路由组件
     let { pathname } = this.props.location
     pathname = pathname.startsWith('/product') ? '/product' : pathname

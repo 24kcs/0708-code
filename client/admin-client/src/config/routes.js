@@ -10,6 +10,11 @@ import AddUpdate from '../containers/product/add-update/AddUpdate.jsx'
 import Role from '../containers/role/Role.jsx'
 // 引入User组件
 import User from '../containers/user/User.jsx'
+
+// 引入Bar组件
+import Bar from '../components/Bar/Bar.jsx'
+import Pie from '../components/Pie/Pie.jsx'
+import Line from '../components/Line/Line.jsx'
 export default[
   {
     exact:true,
@@ -39,5 +44,20 @@ export default[
     exact:true,
     path:'/user',
     component:User
+  },
+  {
+    exact:true,
+    path:'/charts/bar',
+    component:Bar
+  },
+  {
+    exact:true,
+    path:'/charts/pie',
+    component:Pie
+  },
+  {
+    exact:true,
+    path:'/charts/line',
+    component:Line
   }
 ]

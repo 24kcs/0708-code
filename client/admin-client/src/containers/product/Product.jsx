@@ -27,11 +27,12 @@ class Product extends Component {
     },
     {
       title: '状态',
-      dataIndex: 'status',
-      render: () => {
+      // dataIndex: 'status',
+      render: (product) => {
+        const {status,_id}=product
         return (
           <div>
-            <Button type="primary">上架</Button>
+            <Button type="primary" onClick={()=>{this.changeStatus(status,_id)}}>上架</Button>
             <span>已下架</span>
           </div>
         )
@@ -51,6 +52,14 @@ class Product extends Component {
       }
     }
   ]
+  // 切换
+  changeStatus=(status,_id)=>{
+    console.log(status,_id)
+    const product=this.state.products.find(product=>product._id===_id)
+    product.status=2
+    
+   
+  }
   // 删除操作
   delProduct = (productId) => {
     Modal.confirm({
@@ -63,7 +72,7 @@ class Product extends Component {
         await reqDeleteProduct(productId)
         // 坑=========================
         this.setState({
-          current:1
+          current: 1
         })
         this.getProducts(1, 3)
       }
@@ -71,6 +80,7 @@ class Product extends Component {
   }
   // 状态数据
   state = {
+
     products: [], // 用来存储所有商品的信息的(数组,里面是对象)
     total: 0, // 总数据条数
     searchKey: 'productName', // 默认搜索的是 商品名字
@@ -79,7 +89,7 @@ class Product extends Component {
     pageSize: 3,
     isSearch: false,  // 默认是正常的获取数据,如果为true则是搜索的方式来获取数据
     prevStateValue: '',
-    current:1
+    current: 1
 
   }
   // 发送请求获取商品的信息数据
@@ -107,7 +117,7 @@ class Product extends Component {
         products: result.data.list, // 商品数组信息
         total: result.data.total, // 总条数
         searchValue: prevStateValue,
-         current:pageNum
+        current: pageNum
       })
     }
   }
@@ -151,16 +161,16 @@ class Product extends Component {
         isSearch: true, // 原来默认是false,如果是搜索了,那么此时为true
         // 是否需要更新其他数据======
         prevStateValue: searchValue,
-         current:1
+        current: 1
       })
 
     }
-  
+
   }
 
   render() {
     // 解构出products
-    const { products, total, searchKey, searchValue, pageNum ,current} = this.state
+    const { products, total, searchKey, searchValue, pageNum, current } = this.state
     return (
       <Card
         title={
@@ -184,7 +194,7 @@ class Product extends Component {
           bordered
           rowKey="_id"
           pagination={{
-            
+
             showSizeChanger: true,
             showQuickJumper: true,
             defaultPageSize: 3,

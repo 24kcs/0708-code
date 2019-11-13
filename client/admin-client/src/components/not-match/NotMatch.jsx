@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-
+import four from './images/404.jpg'
 class NotMatch extends Component {
   render() {
     return (
       <div>
-        NotMatch---测试使用
+      
+        <img src={four} alt="404"/>
       </div>
     );
   }
